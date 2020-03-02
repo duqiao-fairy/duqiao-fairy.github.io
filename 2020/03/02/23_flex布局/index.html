@@ -1,0 +1,179 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="duqiao"><meta name="renderer" content="webkit"><meta name="copyright" content="duqiao"><meta name="keywords" content="Hexo"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>flex布局 · duqiao's Blog</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/favicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/dq.JPG"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">duqiao</div><div class="profile-signature">自律即自由</div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">duqiao's Blog</a></div><div class="intro-nav-label-box"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">flex布局</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2020-03-02</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p><a href="https://juejin.im/post/5ac2329b6fb9a028bf057caf" target="_blank" rel="noopener">参考</a></p>
+<h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1. 基本概念"></a>1. 基本概念</h2><p>采用 Flex 布局的元素，称为 Flex 容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为 Flex 项目（flex item），简称”项目”。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cb210abb4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做main start，结束位置叫做main end；交叉轴的开始位置叫做cross start，结束位置叫做cross end。<br>Flex项目默认沿主轴排列。单个项目占据的主轴空间叫做main size，占据的交叉轴空间叫做cross size。<br>Flex属性分为两部分，一部分作用于容器称容器属性，另一部分作用于项目称为项目属性。下面我们就分部的来介绍它们.</p>
+<h2 id="2-容器属性-父容器"><a href="#2-容器属性-父容器" class="headerlink" title="2. 容器属性(父容器)"></a>2. 容器属性(父容器)</h2><p>使用flex布局首先要设置父容器: display: flex, 然后再设置justify-content: center实现水平居中, 最后设置: align-items: center 实现垂直居中.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#dad &#123;</span><br><span class="line">  display: flex;</span><br><span class="line">  justify-content: center; <span class="comment">// 水平居中</span></span><br><span class="line">  align-items: center; <span class="comment">// 垂直居中</span></span><br><span class="line">  flex-direction: row; <span class="comment">// 决定主轴的方向（即项目的排列方向）</span></span><br><span class="line">  flex-wrap: nowrap; <span class="comment">// 是否换行排列</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://lc-gold-cdn.xitu.io/933e6f0857399ccf7e83.png?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="2-1-flex容器定义"><a href="#2-1-flex容器定义" class="headerlink" title="2.1 flex容器定义"></a>2.1 flex容器定义</h3><p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">  display: flex; <span class="comment">/* 或者 inline-flex */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-2-flex-direction"><a href="#2-2-flex-direction" class="headerlink" title="2.2 flex-direction"></a>2.2 flex-direction</h3><p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    flex-direction: row | row-reverse | column | column-reverse;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>row 表示从左向右排列</li>
+<li>row-reverse 表示从右向左排列</li>
+<li>column 表示从上向下排列</li>
+<li>column-reverse 表示从下向上排列</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cd0b76595?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="2-3-flex-wrap"><a href="#2-3-flex-wrap" class="headerlink" title="2.3 flex-wrap"></a>2.3 flex-wrap</h3><p>缺省情况下，Flex项目都排在一条线（又称”轴线”）上。我们可以通过flex-wrap属性的设置，让Flex项目换行排列。</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    flex-wrap: nowrap | wrap | wrap-reverse;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>nowrap(缺省)：所有Flex项目单行排列</li>
+<li>wrap：所有Flex项目多行排列，按从上到下的顺序</li>
+<li>wrap-reverse：所有Flex项目多行排列，按从下到上的顺序</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cb12db292?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="2-4-flex-flow"><a href="#2-4-flex-flow" class="headerlink" title="2.4 flex-flow"></a>2.4 flex-flow</h3><p>flex-flow属性是flex-direction属性和flex-wrap属性的简写形式，默认值为row nowrap</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    fflex-flow: &lt;‘flex-direction’&gt; || &lt;‘flex-wrap’&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-5-justify-content"><a href="#2-5-justify-content" class="headerlink" title="2.5 justify-content"></a>2.5 justify-content</h3><p>justify-content属性定义了项目在主轴上的对齐方式及额外空间的分配方式。</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>flex-start(缺省)：从启点线开始顺序排列</li>
+<li>flex-end：相对终点线顺序排列</li>
+<li>center：居中排列</li>
+<li>space-between：项目均匀分布，第一项在启点线，最后一项在终点线</li>
+<li>space-around：项目均匀分布，每一个项目两侧有相同的留白空间，相邻项目之间的距离是两个项目之间留白的和</li>
+<li>space-evenly：项目均匀分布，所有项目之间及项目与边框之间距离相等</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cb20616af?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="2-6-align-items"><a href="#2-6-align-items" class="headerlink" title="2.6 align-items"></a>2.6 align-items</h3><p>align-items属性定义项目在交叉轴上的对齐方式。<br><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    jalign-items: stretch | flex-start | flex-end | center | baseline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>stretch(缺省)：交叉轴方向拉伸显示</li>
+<li>flex-start：项目按交叉轴起点线对齐</li>
+<li>flex-end：项目按交叉轴终点线对齐</li>
+<li>center：交叉轴方向项目中间对齐</li>
+<li>baseline：交叉轴方向按第一行文字基线对齐</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cb18083e3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="2-7-align-content"><a href="#2-7-align-content" class="headerlink" title="2.7 align-content"></a>2.7 align-content</h3><p>align-content属性定义了在交叉轴方向的对齐方式及额外空间分配，类似于主轴上justify-content的作用。<br><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    align-content: stretch | flex-start | flex-end | center | space-between | space-around ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>stretch (缺省)：拉伸显示</li>
+<li>flex-start：从启点线开始顺序排列</li>
+<li>flex-end：相对终点线顺序排列</li>
+<li>center：居中排列</li>
+<li>space-between：项目均匀分布，第一项在启点线，最后一项在终点线</li>
+<li>space-around：项目均匀分布，每一个项目两侧有相同的留白空间，相邻项目之间的距离是两个项目之间留白的和</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cb17eb348?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h2 id="项目属性-子容器"><a href="#项目属性-子容器" class="headerlink" title="项目属性(子容器)"></a>项目属性(子容器)</h2><h3 id="3-1-order"><a href="#3-1-order" class="headerlink" title="3.1 order"></a>3.1 order</h3><p>缺省情况下，Flex项目是按照在代码中出现的先后顺序排列的。然而order属性可以控制项目在容器中的先后顺序。<br><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  order: &lt;integer&gt;; /* 缺省 0 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>按order值从小到大顺序排列，可以为负值，缺省为0。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cd362d2ce?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="3-2-flex-grow"><a href="#3-2-flex-grow" class="headerlink" title="3.2 flex-grow"></a>3.2 flex-grow</h3><p>flex-grow属性定义项目的放大比例, flex-grow值是一个单位的正整数, 表示放大的比例. 默认为0, 即如果存在额外空间, 也不放大, 负值无效.</p>
+<p>如果所有项目的flex-grow属性都为1, 则它们将等分剩余空间(如果有的话). 如果一个项目的flex属性为2, 其他项目都为1, 则前者占据剩余空间将比其他项多一倍</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  flex-grow: &lt;number&gt;; /* 缺省 0 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cd4e13d3f?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="3-3-flex-shrink"><a href="#3-3-flex-shrink" class="headerlink" title="3.3 flex-shrink"></a>3.3 flex-shrink</h3><p>flex-shrink属性定义了项目的缩小比例, 默认为1, 即如果空间不足, 该项目将缩小. 0表示不缩小, 负值无效.</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  flex-shrink: &lt;number&gt;; /* 缺省 1 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695ce473e24c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="3-4-flex-basis"><a href="#3-4-flex-basis" class="headerlink" title="3.4 flex-basis"></a>3.4 flex-basis</h3><p>flex-basis属性定义项目在分配额外空间之前的缺省尺寸. 属性值可以是长度(20%, 10rem等) 或者关键字auto. 它的默认值为auto, 即项目的本来大小.</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  flex-basis: &lt;length&gt; | auto; /* 缺省 auto */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cee00902d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="3-5-flex"><a href="#3-5-flex" class="headerlink" title="3.5 flex"></a>3.5 flex</h3><p>flex属性是flex-grow, flex-shrink和flex-basis的简写, 默认值为0 1 auto. 后两个是可选属性.</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  flex: none | [ &lt;'flex-grow'&gt; &lt;'flex-shrink'&gt;? || &lt;'flex-basis'&gt; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-6-align-self"><a href="#3-6-align-self" class="headerlink" title="3.6 align-self"></a>3.6 align-self</h3><p>align-self属性定义项目的对齐方式, 可覆盖align-item属性. 默认值为auto, 表示继承父元素的align-items属性, 如果没有父元素, 则等用于stretch</p>
+<p><strong>基本语法:</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.item &#123;</span><br><span class="line">  align-self: auto | flex-start | flex-end | center | baseline | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>除了auto值以外，align-self属性与容器的align-items属性基本一致。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2018/4/2/1628695cf0a7bb39?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<h3 id="在主轴上如何伸缩-flex"><a href="#在主轴上如何伸缩-flex" class="headerlink" title="在主轴上如何伸缩: flex"></a>在主轴上如何伸缩: flex</h3><p><img src="https://lc-gold-cdn.xitu.io/089d48122453e9fc372c.png?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+<p>子容器是有弹性的 (flex即弹性), 它们会自动填充剩余空间, 子容器的伸缩比例由 flex 属性确定.</p>
+<p>flex 的值可以是无单位数字（如：1, 2, 3），也可以是有单位数字（如：15px，30px，60px），还可以是 none 关键字。子容器会按照 flex 定义的尺寸比例自动伸缩，如果取值为 none 则不伸缩。<br>  虽然 flex 是多个属性的缩写，允许 1 - 3 个值连用，但通常用 1 个值就可以满足需求，它的全部写法可参考下图。</p>
+<p><img src="https://lc-gold-cdn.xitu.io/78e9030183f686e0b6ed.png?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"></p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="http://yoursite.com">duqiao</a></p><p> <span>Link:  </span><a href="http://yoursite.com/2020/03/02/23_flex布局/">http://yoursite.com/2020/03/02/23_flex布局/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2020/03/02/22_React的hooks/" title="React的hooks"><span>< PreviousPost</span><br><span class="prevTitle">React的hooks</span></a><a class="nextSlogan" href="/2020/03/02/24_每日一题 copy/" title="每日一题"><span>NextPost ></span><br><span class="nextTitle">每日一题</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-基本概念"><span class="toc-number">1.</span> <span class="toc-text">1. 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-容器属性-父容器"><span class="toc-number">2.</span> <span class="toc-text">2. 容器属性(父容器)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-flex容器定义"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 flex容器定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-flex-direction"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 flex-direction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-flex-wrap"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 flex-wrap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-flex-flow"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 flex-flow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-justify-content"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 justify-content</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-align-items"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 align-items</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-align-content"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 align-content</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#项目属性-子容器"><span class="toc-number">3.</span> <span class="toc-text">项目属性(子容器)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-order"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 order</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-flex-grow"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 flex-grow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-flex-shrink"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 flex-shrink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-flex-basis"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 flex-basis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-flex"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 flex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-align-self"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 align-self</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在主轴上如何伸缩-flex"><span class="toc-number">3.7.</span> <span class="toc-text">在主轴上如何伸缩: flex</span></a></li></ol></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
